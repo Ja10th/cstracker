@@ -119,80 +119,285 @@ const PAGE_NAMES = {
   dist: 'distribution records',
 };
 
-/* ── Dispatch Seedlings Modal ─────────────────────────────────────────── */
+/* ── Multi-Recipient Dispatch Seedlings Modal ───────────────────────── */
 const inputCls = 'border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:border-[#176B3A] w-full bg-white';
 
 function DispatchModal({ isOpen, record, nur, onClose, onSubmit }) {
   const today = new Date().toISOString().slice(0, 10);
   const maxQty = parseInt(record?.qty, 10) || 0;
-  const [form, setForm] = useState({
-    to: '', dest: nur?.state || STATES[0], qty: '', date: today, status: 'Dispatched', remarks: '',
+
+  const [meta, setMeta] = useState({
+    date: today,
+    status: 'Dispatched',
+    waybill: '',
   });
-  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
-  const [err, setErr] = useState({});
+
+  const [recipients, setRecipients] = useState([
+    { id: '1', to: '', qty: '', dest: nur?.state || STATES[0], remarks: '' }
+  ]);
+
+  const [errors, setErrors] = useState({});
+
+  // Reset when opened
+  React.useEffect(() => {
+    if (isOpen) {
+      setMeta({ date: today, status: 'Dispatched', waybill: '' });
+      setRecipients([
+        { id: '1', to: '', qty: '', dest: nur?.state || STATES[0], remarks: '' }
+      ]);
+      setErrors({});
+    }
+  }, [isOpen, nur, today]);
+
+  const totalAllocated = recipients.reduce((sum, r) => sum + (parseInt(r.qty, 10) || 0), 0);
+  const remainingQty = maxQty - totalAllocated;
+  const isOverAllocated = totalAllocated > maxQty;
+
+  const addRecipient = () => {
+    const rem = Math.max(0, remainingQty);
+    setRecipients(curr => [
+      ...curr,
+      {
+        id: String(Date.now()),
+        to: '',
+        qty: rem > 0 ? String(rem) : '',
+        dest: nur?.state || STATES[0],
+        remarks: ''
+      }
+    ]);
+  };
+
+  const removeRecipient = (id) => {
+    if (recipients.length <= 1) return;
+    setRecipients(curr => curr.filter(r => r.id !== id));
+  };
+
+  const updateRecipient = (id, key, val) => {
+    setRecipients(curr => curr.map(r => r.id === id ? { ...r, [key]: val } : r));
+    setErrors(prev => {
+      const copy = { ...prev };
+      delete copy[`${id}_${key}`];
+      return copy;
+    });
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
     const errs = {};
-    if (!form.to.trim()) errs.to = 'Recipient name is required.';
-    if (!form.qty || parseInt(form.qty, 10) < 1) errs.qty = 'Valid quantity is required.';
-    if (parseInt(form.qty, 10) > maxQty) errs.qty = `Cannot exceed available seedlings (${maxQty.toLocaleString()}).`;
-    if (!form.dest) errs.dest = 'Destination state is required.';
-    if (Object.keys(errs).length) { setErr(errs); return; }
-    onSubmit(form);
+
+    if (totalAllocated <= 0) {
+      errs.general = 'Please allocate at least 1 seedling to a recipient.';
+    } else if (totalAllocated > maxQty) {
+      errs.general = `Total allocation (${totalAllocated.toLocaleString()}) exceeds batch capacity (${maxQty.toLocaleString()}).`;
+    }
+
+    recipients.forEach((r, idx) => {
+      if (!r.to.trim()) {
+        errs[`${r.id}_to`] = `Recipient #${idx + 1} name is required.`;
+      }
+      const q = parseInt(r.qty, 10);
+      if (!q || q < 1) {
+        errs[`${r.id}_qty`] = `Valid quantity required for Recipient #${idx + 1}.`;
+      }
+    });
+
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
+
+    const dispatches = recipients.map(r => ({
+      to: r.to.trim(),
+      qty: String(r.qty),
+      dest: r.dest,
+      date: meta.date,
+      status: meta.status,
+      remarks: [meta.waybill, r.remarks].filter(Boolean).join(' | '),
+    }));
+
+    onSubmit(dispatches);
     onClose();
   }
 
   if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
-      <div className="bg-white w-full max-w-lg border border-gray-200 shadow-xl">
-        <div className="px-6 py-4 border-b border-gray-200 bg-[#FAF8F1] flex items-center justify-between">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/50 overflow-y-auto">
+      <div className="bg-white w-full max-w-2xl border border-gray-200 shadow-2xl my-6 flex flex-col max-h-[90vh]">
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-gray-200 bg-[#FAF8F1] flex items-center justify-between shrink-0">
           <div>
             <h2 className="text-base font-bold text-gray-900">Dispatch Seedlings to Farmers</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Record {record?.qty && parseInt(record.qty).toLocaleString()} available seedlings from {record?.nur}</p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Batch <span className="font-mono font-semibold text-[#176B3A]">{record?.id}</span> &bull; {maxQty.toLocaleString()} available seedlings from {record?.nur}
+            </p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg leading-none">✕</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg leading-none p-1">✕</button>
         </div>
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-wide text-gray-600 mb-1 block">Recipient Farmer / Cooperative Group *</label>
-            <input className={inputCls} value={form.to} onChange={e => set('to', e.target.value)} placeholder="e.g. Ido Smallholder Farmers Cooperative" />
-            {err.to && <span className="text-xs text-red-600 mt-0.5 block">{err.to}</span>}
+
+        {/* Live Seedling Allocation Tracker Banner */}
+        <div className="px-6 py-3 bg-[#F4EFE6] border-b border-gray-200 shrink-0">
+          <div className="flex flex-wrap items-center justify-between text-xs font-medium mb-1.5">
+            <span className="text-gray-700">
+              Allocated: <strong className={isOverAllocated ? 'text-red-600' : 'text-[#176B3A]'}>{totalAllocated.toLocaleString()}</strong> of {maxQty.toLocaleString()} seedlings
+            </span>
+            <span className={remainingQty < 0 ? 'text-red-600 font-bold' : 'text-gray-600'}>
+              {remainingQty >= 0 ? `${remainingQty.toLocaleString()} seedlings unassigned` : `${Math.abs(remainingQty).toLocaleString()} seedlings OVER batch limit!`}
+            </span>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="w-full bg-gray-200 h-2 overflow-hidden">
+            <div
+              className={`h-full transition-all duration-200 ${isOverAllocated ? 'bg-red-600' : 'bg-[#176B3A]'}`}
+              style={{ width: `${Math.min(100, Math.round((totalAllocated / maxQty) * 100))}%` }}
+            />
+          </div>
+          {errors.general && (
+            <p className="text-xs text-red-600 mt-1 font-semibold">{errors.general}</p>
+          )}
+        </div>
+
+        {/* Scrollable Form Body */}
+        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-5 flex-1">
+          {/* Shared Shipment Logistics */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 bg-gray-50 border border-gray-200">
             <div>
-              <label className="text-xs font-semibold uppercase tracking-wide text-gray-600 mb-1 block">Quantity to Dispatch *</label>
-              <input type="number" className={inputCls} value={form.qty} onChange={e => set('qty', e.target.value)} placeholder={`max ${maxQty.toLocaleString()}`} min="1" max={maxQty} />
-              {err.qty && <span className="text-xs text-red-600 mt-0.5 block">{err.qty}</span>}
+              <label className="text-[11px] font-semibold uppercase tracking-wide text-gray-600 mb-1 block">Dispatch Date</label>
+              <input type="date" className={inputCls} value={meta.date} max={today} onChange={e => setMeta(m => ({ ...m, date: e.target.value }))} />
             </div>
             <div>
-              <label className="text-xs font-semibold uppercase tracking-wide text-gray-600 mb-1 block">Dispatch Date</label>
-              <input type="date" className={inputCls} value={form.date} max={today} onChange={e => set('date', e.target.value)} />
+              <label className="text-[11px] font-semibold uppercase tracking-wide text-gray-600 mb-1 block">Shipment Status</label>
+              <select className={`${inputCls} app-select`} value={meta.status} onChange={e => setMeta(m => ({ ...m, status: e.target.value }))}>
+                <option value="Dispatched">Dispatched (en route)</option>
+                <option value="In Transit">In Transit</option>
+                <option value="Received">Received by farmers</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-[11px] font-semibold uppercase tracking-wide text-gray-600 mb-1 block">Waybill / Batch Note</label>
+              <input className={inputCls} value={meta.waybill} onChange={e => setMeta(m => ({ ...m, waybill: e.target.value }))} placeholder="e.g. WB-2026-081" />
             </div>
           </div>
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-wide text-gray-600 mb-1 block">Destination State *</label>
-            <select className={`${inputCls} app-select`} value={form.dest} onChange={e => set('dest', e.target.value)}>
-              {STATES.map(s => <option key={s}>{s}</option>)}
-            </select>
-            {err.dest && <span className="text-xs text-red-600 mt-0.5 block">{err.dest}</span>}
+
+          {/* Recipient Allocations List */}
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wide text-gray-700">
+                Recipients List ({recipients.length} {recipients.length === 1 ? 'Party' : 'Parties'})
+              </span>
+              <span className="text-[11px] text-gray-500">Dispatch to single farmer or distribute across multiple groups</span>
+            </div>
+
+            {recipients.map((r, idx) => (
+              <div key={r.id} className="p-4 bg-white border border-gray-200 shadow-sm relative space-y-3">
+                <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 bg-[#176B3A] text-white text-[11px] font-bold flex items-center justify-center">
+                      {idx + 1}
+                    </span>
+                    <span className="text-xs font-bold text-gray-800">
+                      Farmer / Cooperative #{idx + 1}
+                    </span>
+                  </div>
+                  {recipients.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeRecipient(r.id)}
+                      className="text-xs text-red-600 hover:text-red-800 font-medium flex items-center gap-1"
+                    >
+                      ✕ Remove
+                    </button>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                  <div className="sm:col-span-6">
+                    <label className="text-[11px] font-semibold uppercase tracking-wide text-gray-600 mb-1 block">
+                      Recipient Farmer or Cooperative *
+                    </label>
+                    <input
+                      className={inputCls}
+                      value={r.to}
+                      onChange={e => updateRecipient(r.id, 'to', e.target.value)}
+                      placeholder="e.g. Adeyemi Smallholder Group"
+                    />
+                    {errors[`${r.id}_to`] && (
+                      <span className="text-[11px] text-red-600 mt-0.5 block">{errors[`${r.id}_to`]}</span>
+                    )}
+                  </div>
+
+                  <div className="sm:col-span-3">
+                    <label className="text-[11px] font-semibold uppercase tracking-wide text-gray-600 mb-1 block">
+                      Quantity *
+                    </label>
+                    <input
+                      type="number"
+                      className={inputCls}
+                      value={r.qty}
+                      onChange={e => updateRecipient(r.id, 'qty', e.target.value)}
+                      placeholder="e.g. 2,000"
+                      min="1"
+                    />
+                    {errors[`${r.id}_qty`] && (
+                      <span className="text-[11px] text-red-600 mt-0.5 block">{errors[`${r.id}_qty`]}</span>
+                    )}
+                  </div>
+
+                  <div className="sm:col-span-3">
+                    <label className="text-[11px] font-semibold uppercase tracking-wide text-gray-600 mb-1 block">
+                      State *
+                    </label>
+                    <select
+                      className={`${inputCls} app-select`}
+                      value={r.dest}
+                      onChange={e => updateRecipient(r.id, 'dest', e.target.value)}
+                    >
+                      {STATES.map(s => <option key={s}>{s}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="sm:col-span-12">
+                    <input
+                      className="border border-gray-200 px-3 py-1.5 text-xs focus:outline-none focus:border-[#176B3A] w-full bg-gray-50/50"
+                      value={r.remarks}
+                      onChange={e => updateRecipient(r.id, 'remarks', e.target.value)}
+                      placeholder="Specific farmer community, LGA, phone, or delivery notes (optional)…"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* Add recipient button */}
+            <button
+              type="button"
+              onClick={addRecipient}
+              className="w-full py-2.5 border-2 border-dashed border-[#176B3A] text-[#176B3A] text-xs font-bold hover:bg-[#EAF5EE] flex items-center justify-center gap-1.5 transition-colors"
+            >
+              + Add Another Farmer / Cooperative Recipient
+            </button>
           </div>
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-wide text-gray-600 mb-1 block">Delivery Status</label>
-            <select className={`${inputCls} app-select`} value={form.status} onChange={e => set('status', e.target.value)}>
-              <option value="Dispatched">Dispatched (en route)</option>
-              <option value="In Transit">In Transit</option>
-              <option value="Received">Received by farmers</option>
-            </select>
-          </div>
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-wide text-gray-600 mb-1 block">Waybill / Officer Remarks</label>
-            <textarea className={inputCls} rows={2} value={form.remarks} onChange={e => set('remarks', e.target.value)} placeholder="Waybill number, transport notes, or dispatch remarks…" />
-          </div>
-          <div className="flex justify-end gap-3 pt-2 border-t border-gray-100">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm border border-gray-200 text-gray-700 hover:bg-gray-50">Cancel</button>
-            <button type="submit" className="action-button">Record Dispatch</button>
+
+          {/* Footer Controls */}
+          <div className="flex items-center justify-between gap-3 pt-3 border-t border-gray-200 shrink-0">
+            <span className="text-xs text-gray-500">
+              Total to record: <strong>{totalAllocated.toLocaleString()}</strong> seedlings across <strong>{recipients.length}</strong> {recipients.length === 1 ? 'recipient' : 'recipients'}
+            </span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 text-sm border border-gray-200 text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isOverAllocated}
+                className={`action-button ${isOverAllocated ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                Record {recipients.length > 1 ? `All ${recipients.length} Dispatches` : 'Dispatch'}
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -962,18 +1167,21 @@ export default function WorkflowPage() {
         record={record}
         nur={linkedNur}
         onClose={() => setShowDispatch(false)}
-        onSubmit={(form) => {
-          addRecord('dist', {
-            nur: record.nur,
-            prod: record.id,
-            variety: record.variety,
-            qty: String(form.qty),
-            to: form.to,
-            dest: form.dest,
-            date: form.date,
-            status: form.status,
-            remarks: form.remarks,
-            by: currentUser?.name || 'Administrator',
+        onSubmit={(items) => {
+          const list = Array.isArray(items) ? items : [items];
+          list.forEach((item) => {
+            addRecord('dist', {
+              nur: record.nur,
+              prod: record.id,
+              variety: record.variety,
+              qty: String(item.qty),
+              to: item.to,
+              dest: item.dest,
+              date: item.date,
+              status: item.status,
+              remarks: item.remarks,
+              by: currentUser?.name || 'Administrator',
+            });
           });
         }}
       />

@@ -80,50 +80,75 @@ export default function ListPage({ pageKey }) {
 
   return (
     <div className="p-3 sm:p-6">
-      {/* Table */}
+      {/* Table Card */}
       <div className="bg-white border border-gray-200">
-        <div className="px-4 sm:px-5 py-4 border-b border-gray-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div className="section-heading">{TABLE_HEADINGS[pageKey] || 'Records'}</div>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 w-full md:w-auto flex-wrap">
-            <div className="relative w-full sm:w-52">
-              <Icon name="search" className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              <input type="search" value={f.search || ''} onChange={e => setFilter(pageKey, 'search', e.target.value)} placeholder={`Search ${cfg.title.toLowerCase()}…`} className="app-input w-full text-gray-900 font-medium" />
-            </div>
-            {cfg.filterFields.map(ff => (
-              <select key={ff.key} value={f[ff.key] || ''} onChange={e => setFilter(pageKey, ff.key, e.target.value)} className="app-select w-full sm:w-auto text-gray-900 font-medium">
-                <option value="">{ff.label}</option>
-                {getSelectOptions(ff).map(o => <option key={o} value={o}>{o}</option>)}
-              </select>
-            ))}
-            {cfg.hasDateRange && (
+        {/* Header: Title & Action Button */}
+        <div className="px-5 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white">
+          <div>
+            <div className="section-heading text-xl font-bold text-gray-900">{TABLE_HEADINGS[pageKey] || 'Records'}</div>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Showing {filtered.length} of {allRows.length} total entries
+            </p>
+          </div>
+          {canAdd && ['nur', 'prod', 'dist', 'users'].includes(pageKey) && (
+            <button
+              onClick={() => setShowAdd(true)}
+              className="action-button compact-action flex items-center justify-center gap-1.5 transition-colors self-start sm:self-auto shrink-0"
+            >
+              <Icon name="plus" className="w-3.5 h-3.5" />
+              {cfg.addLabel}
+            </button>
+          )}
+        </div>
+
+        {/* Filter Toolbar: Spacious on Desktop, Stackable on Mobile */}
+        <div className="px-5 py-3 bg-[#FAF8F1] border-b border-gray-200 flex flex-wrap items-center gap-2.5">
+          <div className="relative w-full sm:w-64">
+            <Icon name="search" className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <input
+              type="search"
+              value={f.search || ''}
+              onChange={e => setFilter(pageKey, 'search', e.target.value)}
+              placeholder={`Search ${cfg.title.toLowerCase()}…`}
+              className="app-input w-full text-gray-900 font-medium text-xs bg-white"
+            />
+          </div>
+          {cfg.filterFields.map(ff => (
+            <select
+              key={ff.key}
+              value={f[ff.key] || ''}
+              onChange={e => setFilter(pageKey, ff.key, e.target.value)}
+              className="app-select w-full sm:w-auto text-gray-900 font-medium text-xs"
+            >
+              <option value="">{ff.label}</option>
+              {getSelectOptions(ff).map(o => <option key={o} value={o}>{o}</option>)}
+            </select>
+          ))}
+          {cfg.hasDateRange && (
+            <div className="flex items-center gap-1.5 w-full sm:w-auto">
+              <span className="text-xs text-gray-500 font-medium whitespace-nowrap">Date:</span>
               <input
                 type="date"
                 value={f.dateFrom || ''}
                 onChange={e => setFilter(pageKey, 'dateFrom', e.target.value)}
-                className="app-date-input border border-gray-200 px-3 py-2 text-xs sm:text-sm bg-white text-gray-900 font-medium focus:outline-none focus:border-[#176B3A] min-h-[38px] w-full sm:w-auto"
+                className="app-date-input border border-gray-200 px-3 py-1.5 text-xs bg-white text-gray-900 font-medium focus:outline-none focus:border-[#176B3A] min-h-[38px] w-full sm:w-auto"
                 title="Filter by date"
               />
-            )}
-            {filtered.length !== allRows.length && (
-              <button
-                type="button"
-                onClick={() => {
-                  cfg.filterFields.forEach(ff => setFilter(pageKey, ff.key, ''));
-                  setFilter(pageKey, 'search', '');
-                  if (cfg.hasDateRange) { setFilter(pageKey, 'dateFrom', ''); setFilter(pageKey, 'dateTo', ''); }
-                }}
-                className="text-xs text-red-600 hover:underline py-1 text-center"
-              >
-                Clear filters
-              </button>
-            )}
-            {canAdd && ['nur', 'prod', 'dist', 'users'].includes(pageKey) && (
-              <button onClick={() => setShowAdd(true)} className="action-button compact-action flex items-center justify-center gap-1.5 transition-colors w-full sm:w-auto">
-                <Icon name="plus" className="w-3.5 h-3.5" />
-                {cfg.addLabel}
-              </button>
-            )}
-          </div>
+            </div>
+          )}
+          {filtered.length !== allRows.length && (
+            <button
+              type="button"
+              onClick={() => {
+                cfg.filterFields.forEach(ff => setFilter(pageKey, ff.key, ''));
+                setFilter(pageKey, 'search', '');
+                if (cfg.hasDateRange) { setFilter(pageKey, 'dateFrom', ''); setFilter(pageKey, 'dateTo', ''); }
+              }}
+              className="text-xs text-red-600 hover:underline px-2 py-1 font-medium ml-auto sm:ml-0"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
         <div className="overflow-x-auto">
         <table className="data-table w-full text-[14px] min-w-[600px]">
