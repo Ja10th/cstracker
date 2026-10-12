@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import { SEED_DATA, STORAGE_KEY, PERMISSIONS, PEOPLE } from '../data/seed';
+import { queueSync } from '../utils/syncManager';
 
 export const AppContext = createContext(null);
 const SESSION_KEY = `${STORAGE_KEY}_session`;
@@ -215,6 +216,14 @@ export function AppProvider({ children }) {
     };
     dispatch({ type: 'ADD_AUDIT', entry: audit });
     showToast(`Record ${newRecord.id} added.`);
+    
+    // Queue for sync
+    queueSync({
+      type: 'ADD_RECORD',
+      key,
+      record: newRecord,
+      user: state.currentUser?.name,
+    });
   }, [state.data, state.currentUser]);
 
   const editRecord = useCallback((key, id, record) => {
@@ -227,6 +236,15 @@ export function AppProvider({ children }) {
     };
     dispatch({ type: 'ADD_AUDIT', entry: audit });
     showToast(`Record ${id} updated.`);
+    
+    // Queue for sync
+    queueSync({
+      type: 'EDIT_RECORD',
+      key,
+      id,
+      record,
+      user: state.currentUser?.name,
+    });
   }, [state.currentUser]);
 
   const toggleUserStatus = useCallback((id) => {
@@ -237,7 +255,16 @@ export function AppProvider({ children }) {
   const decide = useCallback((inspId, decision, reason) => {
     dispatch({ type: 'DECIDE', inspId, decision, reason });
     showToast(`Inspection marked as ${decision}.`);
-  }, []);
+    
+    // Queue for sync
+    queueSync({
+      type: 'DECIDE',
+      inspId,
+      decision,
+      reason,
+      user: state.currentUser?.name,
+    });
+  }, [state.currentUser]);
 
   const resetData = useCallback(() => {
     dispatch({ type: 'RESET_DATA' });

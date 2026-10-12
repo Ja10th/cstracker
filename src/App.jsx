@@ -3,6 +3,7 @@ import { useApp } from './context/AppContext';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Toast from './components/Toast';
+import SyncStatus from './components/SyncStatus';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import ListPage from './pages/ListPage';
@@ -58,6 +59,7 @@ export default function App() {
         </main>
       </div>
       <Toast />
+      <SyncStatus />
     </div>
   );
 }

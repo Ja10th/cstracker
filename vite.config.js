@@ -15,6 +15,10 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,webmanifest}'],
+        // Enable background sync
+        navigateFallback: null,
+        // Import the custom sync service worker
+        importScripts: ['/sync-sw.js'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
