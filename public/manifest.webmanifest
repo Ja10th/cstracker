@@ -1,0 +1,14 @@
+{
+  "name": "IITA Cacao Seed Tracker",
+  "short_name": "Cacao Tracker",
+  "description": "Offline-ready nursery, production, inspection, and distribution tracking for cacao operations.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F7F8F6",
+  "theme_color": "#176B3A",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --g: #176B3A;
+    --g2: #4D963F;
+    --y: #E5B83D;
+    --bg: #F7F8F6;
+    --s: #fff;
+    --t: #202620;
+    --m: #6B736B;
+    --b: #E1E5DF;
+    --red: #B3261E;
+    --amb: #8A5A00;
+    --blu: #1F5FA8;
+  }
+
+  * {
+    box-sizing: border-box;
+    border-radius: 0 !important;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--t);
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+    margin: 0;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--g);
+    outline-offset: 1px;
+  }
+
+  .status-badge {
+    border-radius: 0.25rem !important;
+    padding: 0.3rem 0.55rem;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .status-dot {
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 9999px !important;
+    background: currentColor;
+    flex: 0 0 auto;
+  }
+
+  .action-button {
+    background-color: #FF5A1F !important;
+    color: #fff !important;
+    padding: 0.625rem 1.25rem !important;
+    min-height: 40px;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    white-space: nowrap;
+  }
+
+  .action-button:hover {
+    background-color: #E64A14 !important;
+  }
+
+  .compact-action {
+    padding: 0.5rem 0.875rem !important;
+    min-height: 36px;
+  }
+
+  .report-excel-button {
+    background: #176B3A;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .report-excel-button:hover {
+    background: #0F542C;
+  }
+
+  .section-heading {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #374151;
+  }
+
+  .app-select {
+    min-height: 38px;
+    padding: 0.5rem 2.5rem 0.5rem 0.75rem !important;
+    border: 1px solid #E1E5DF !important;
+    border-radius: 10px !important;
+    background-color: #fff;
+    color: #465D79;
+    font-size: 0.8125rem !important;
+    line-height: 1.25;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%2390A2B8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+  }
+
+  .app-select:hover {
+    border-color: #CBD3CC !important;
+  }
+
+  .app-select:focus {
+    outline: none;
+    border-color: #A8D5B5 !important;
+    box-shadow: 0 0 0 2px #DDF2E2;
+  }
+
+  .app-select option {
+    color: #465D79;
+    background: #fff;
+    font-size: 0.8125rem;
+  }
+
+  .app-input {
+    min-height: 38px;
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem !important;
+    border: 1px solid #E1E5DF !important;
+    border-radius: 10px !important;
+    background-color: #fff;
+    font-size: 0.8125rem !important;
+  }
+
+  .app-input:hover {
+    border-color: #CBD3CC !important;
+  }
+
+  .app-input:focus {
+    outline: none;
+    border-color: #A8D5B5 !important;
+    box-shadow: 0 0 0 2px #DDF2E2;
+  }
+
+  .data-table td:nth-child(2) {
+    font-weight: 600;
+  }
+
+  .data-table thead {
+    background-color: #FAF8F1 !important;
+  }
+
+  .data-table th {
+    color: #8B8576 !important;
+  }
+
+  .production-map-tooltip {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.625rem;
+  }
+
+  @media (max-width: 640px) {
+    .data-table th,
+    .data-table td {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    .production-map-tooltip {
+      font-size: 0.9375rem;
+      padding: 0.625rem 0.75rem;
+    }
+  }
+
+}
