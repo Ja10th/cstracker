@@ -109,10 +109,10 @@ export function RecordsTable({ title, records, empty, onRecordClick, columns = [
 }
 
 export function HelpdeskAndGuidelines({
-  helpdeskTitle = "Cacao Seed Helpdesk",
+  helpdeskTitle = "Cocoa Seed Helpdesk",
   status = "AVAILABLE",
   office = "Building 400, IITA Headquarters, Ibadan",
-  email = "cacaoseed@iita.org",
+  email = "Cocoaseed@iita.org",
   phone = "08012345678",
   guidelinesTitle,
   guidelinesBadge,
@@ -127,16 +127,16 @@ export function HelpdeskAndGuidelines({
 
   if (!effectiveGuidelines) {
     if (role === 'Nursery Operator') {
-      effectiveTitle = effectiveTitle || "Platform Guide — Nursery & Farmer Operations";
+      effectiveTitle = effectiveTitle || "Platform Guide — Seed Garden & Farmer Operations";
       effectiveBadge = effectiveBadge || "FARMER GUIDE";
       effectiveGuidelines = [
         {
-          label: "1. Nursery Accreditation & Geotagging",
-          text: "Confirm your nursery site GPS coordinates, operator credentials, and bed capacity with your extension officer before logging batches."
+          label: "1. Seed Garden Accreditation & Geotagging",
+          text: "Confirm your seed garden site GPS coordinates, operator credentials, and bed capacity with your extension officer before logging batches."
         },
         {
           label: "2. Seedling Batch Registration",
-          text: "Record seedling quantities, planting dates, and improved varieties (e.g., CRIN TC-1 to TC-8) with clear nursery bed references."
+          text: "Record seedling quantities, planting dates, and improved varieties (e.g., CRIN TC-1 to TC-8) with clear garden bed references."
         },
         {
           label: "3. Inspection Scheduling",
@@ -152,8 +152,8 @@ export function HelpdeskAndGuidelines({
       effectiveBadge = effectiveBadge || "FIELD GUIDE";
       effectiveGuidelines = [
         {
-          label: "1. Farmer & Nursery Onboarding",
-          text: "Verify applicant details, nursery capacity, and accurate GPS coordinates in your designated agricultural zone."
+          label: "1. Farmer & Seed Garden Onboarding",
+          text: "Verify applicant details, seed garden capacity, and accurate GPS coordinates in your designated agricultural zone."
         },
         {
           label: "2. Production Plan Validation",
@@ -186,7 +186,7 @@ export function HelpdeskAndGuidelines({
         },
         {
           label: "4. National Traceability Gate",
-          text: "Verified batches unlock certified batch tags and distribution authorization in the national cacao seed registry."
+          text: "Verified batches unlock certified batch tags and distribution authorization in the national Cocoa seed registry."
         }
       ];
     } else if (role === 'Project Manager') {
@@ -215,12 +215,12 @@ export function HelpdeskAndGuidelines({
       effectiveBadge = effectiveBadge || "ADMIN GUIDE";
       effectiveGuidelines = [
         {
-          label: "1. Nursery Registry & User Access",
-          text: "Approve newly registered nurseries, manage role permissions, and maintain platform security credentials."
+          label: "1. Seed Garden Registry & User Access",
+          text: "Approve newly registered seed gardens, manage role permissions, and maintain platform security credentials."
         },
         {
           label: "2. National Traceability Governance",
-          text: "Oversee the complete seed pipeline from foundation material and CRIN germplasm to field nurseries."
+          text: "Oversee the complete seed pipeline from foundation material and CRIN germplasm to field seed gardens."
         },
         {
           label: "3. Quality Assurance & Audits",
@@ -234,7 +234,7 @@ export function HelpdeskAndGuidelines({
     }
   }
 
-  effectiveTitle = effectiveTitle || "Platform Guide — Cacao Seed Tracker";
+  effectiveTitle = effectiveTitle || "Platform Guide — Cocoa Seed Tracker";
   effectiveBadge = effectiveBadge || "PLATFORM GUIDE";
 
   return (

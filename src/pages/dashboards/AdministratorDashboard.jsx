@@ -60,14 +60,14 @@ export default function AdministratorDashboard() {
             </select>
             <button
               onClick={() => navigate('infographics')}
-              className="px-3 py-2 border border-emerald-700 bg-emerald-50 text-emerald-800 text-sm font-semibold hover:bg-emerald-100 flex items-center gap-1.5 min-h-[40px]"
+              className="report-excel-button px-3.5 py-2 flex items-center gap-1.5 min-h-[40px] text-white font-semibold"
             >
               <Icon name="chart" className="w-4 h-4" />
               View Infographics
             </button>
             <button onClick={() => setShowAdd(true)} className="action-button flex items-center gap-1.5">
               <Icon name="plus" className="w-3.5 h-3.5" />
-              Register nursery
+              Register seed garden
             </button>
           </>
         }
@@ -76,7 +76,7 @@ export default function AdministratorDashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <KpiCard label="Active nurseries" value={activeNurseries} sublabel={`${pendingNurseries} awaiting activation`} onClick={() => navigate('nur', { status: 'Active' })} />
+        <KpiCard label="Active seed gardens" value={activeNurseries} sublabel={`${pendingNurseries} awaiting activation`} onClick={() => navigate('nur', { status: 'Active' })} />
         <KpiCard label="Seedlings recorded" value={production.reduce((sum, record) => sum + qty(record), 0).toLocaleString()} sublabel={`${approvedProduction} records approved`} onClick={() => navigate('prod')} />
         <KpiCard label="Review queue" value={pending.length} sublabel="Inspections waiting" onClick={() => navigate('insp', { status: 'Pending' })} />
         <KpiCard label="Distribution total" value={distribution.reduce((sum, record) => sum + qty(record), 0).toLocaleString()} sublabel="Seedlings delivered" onClick={() => navigate('dist')} />
@@ -96,8 +96,8 @@ export default function AdministratorDashboard() {
           <VBar items={productionTrend} axisLabel="Seedlings recorded" />
         </div>
         <div className="bg-white border border-gray-200 p-5">
-          <div className="section-heading mb-4">Nurseries by state</div>
-          <LineChart items={Object.entries(states).sort((a, b) => a[0].localeCompare(b[0]))} axisLabel="Registered nurseries" />
+          <div className="section-heading mb-4">Seed gardens by state</div>
+          <LineChart items={Object.entries(states).sort((a, b) => a[0].localeCompare(b[0]))} axisLabel="Registered seed gardens" />
         </div>
       </div>
 
@@ -111,7 +111,7 @@ export default function AdministratorDashboard() {
           <table className="data-table w-full text-[14px]">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
-                {['ID', 'Nursery', 'Variety', 'Quantity', 'Date', 'Recorded by', 'Status'].map((heading) => (
+                {['ID', 'Seed Garden', 'Variety', 'Quantity', 'Date', 'Recorded by', 'Status'].map((heading) => (
                   <th key={heading} className="text-left px-4 py-3 font-medium text-gray-600">{heading}</th>
                 ))}
               </tr>
@@ -120,7 +120,7 @@ export default function AdministratorDashboard() {
               {latest.map((record, index) => (
                 <tr
                   key={record.id}
-                  onClick={() => navigate('workflow', { workflowPageKey: record.planId ? 'plan' : 'prod', workflowRecordId: record.planId || record.id })}
+                  onClick={() => navigate('workflow', { workflowPageKey: 'prod', workflowRecordId: record.id })}
                   className={`cursor-pointer border-b border-gray-100 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-[#F7F3E9]`}
                 >
                   <td className="px-4 py-3 font-mono text-gray-600 text-xs">{record.id}</td>

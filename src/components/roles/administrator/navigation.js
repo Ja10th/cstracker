@@ -2,7 +2,7 @@ import { navItem } from '../shared';
 
 export const administratorNavigation = [
   navItem('home', 'Dashboard', 'home'),
-  navItem('nur', 'Nurseries', 'leaf', 'nur'),
+  navItem('nur', 'Seed Gardens', 'leaf', 'nur'),
   navItem('prod', 'Production', 'box', 'prod'),
   navItem('insp', 'Inspections', 'check', 'verify'),
   navItem('dist', 'Distribution', 'truck', 'prod'),

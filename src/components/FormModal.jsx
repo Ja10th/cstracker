@@ -30,7 +30,7 @@ export default function FormModal({ isOpen, onClose, pageKey, editRecord: editRe
     }
     if (pageKey === 'dist') {
       return {
-        nur: nurOptions[0] || 'Ibadan Cacao Hub',
+        nur: nurOptions[0] || 'Ibadan Cocoa Hub',
         prod: '',
         variety: varOptions[0] || 'Hybrid Type A',
         qty: '',
@@ -81,7 +81,7 @@ export default function FormModal({ isOpen, onClose, pageKey, editRecord: editRe
       if (!form.email?.trim()) e.email = 'Valid email address is required.';
       if (!form.role) e.role = 'Role is required.';
     } else if (pageKey === 'dist') {
-      if (!form.nur) e.nur = 'Source nursery is required.';
+      if (!form.nur) e.nur = 'Source seed garden is required.';
       if (!form.to?.trim()) e.to = 'Recipient farmer or cooperative is required.';
       if (!form.dest) e.dest = 'Destination state is required.';
       if (!form.qty) {
@@ -92,7 +92,7 @@ export default function FormModal({ isOpen, onClose, pageKey, editRecord: editRe
       }
       if (!form.date) e.date = 'Date is required.';
     } else {
-      if (!form.nur) e.nur = 'Nursery is required.';
+      if (!form.nur) e.nur = 'Seed garden is required.';
       if (!form.variety) e.variety = 'Variety is required.';
       if (!form.qty) {
         e.qty = 'Quantity is required.';
@@ -124,8 +124,8 @@ export default function FormModal({ isOpen, onClose, pageKey, editRecord: editRe
   }
 
   const title = isEdit
-    ? `Edit ${pageKey === 'nur' ? 'Nursery' : pageKey === 'users' ? 'User Account' : pageKey === 'dist' ? 'Distribution Record' : 'Production Record'}`
-    : `Add ${pageKey === 'nur' ? 'Nursery' : pageKey === 'users' ? 'User / Staff Account' : pageKey === 'dist' ? 'Seedling Distribution' : 'Production Record'}`;
+    ? `Edit ${pageKey === 'nur' ? 'Seed Garden' : pageKey === 'users' ? 'User Account' : pageKey === 'dist' ? 'Distribution Record' : 'Production Record'}`
+    : `Add ${pageKey === 'nur' ? 'Seed Garden' : pageKey === 'users' ? 'User / Staff Account' : pageKey === 'dist' ? 'Seedling Distribution' : 'Production Record'}`;
 
   return (
     <Modal
@@ -154,8 +154,8 @@ export default function FormModal({ isOpen, onClose, pageKey, editRecord: editRe
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         {pageKey === 'nur' ? (
           <>
-            <Field label="Nursery Name" error={errors.name}>
-              <input className={inputCls} value={form.name} onChange={e => set('name', e.target.value)} placeholder="e.g. Ibadan Cacao Hub" />
+            <Field label="Seed Garden Name" error={errors.name}>
+              <input className={inputCls} value={form.name} onChange={e => set('name', e.target.value)} placeholder="e.g. Ibadan Cocoa Hub" />
             </Field>
             <Field label="Operator" error={errors.op}>
               <input className={inputCls} value={form.op} onChange={e => set('op', e.target.value)} placeholder="e.g. A. Ogunleye" />
@@ -179,9 +179,9 @@ export default function FormModal({ isOpen, onClose, pageKey, editRecord: editRe
                 <option value="Inactive">Inactive</option>
               </select>
             </Field>
-            <Field label="Nursery photo (optional)">
+            <Field label="Seed garden photo (optional)">
               <input type="file" accept="image/*" onChange={handlePhoto} className="w-full border border-gray-200 px-3 py-2 text-xs bg-white" />
-              {form.photo && <img src={form.photo} alt="Nursery evidence preview" className="mt-2 h-24 w-full object-cover border border-gray-200" />}
+              {form.photo && <img src={form.photo} alt="Seed garden evidence preview" className="mt-2 h-24 w-full object-cover border border-gray-200" />}
             </Field>
           </>
         ) : pageKey === 'users' ? (
@@ -198,7 +198,7 @@ export default function FormModal({ isOpen, onClose, pageKey, editRecord: editRe
                 <option value="Project Manager">Project Manager (National / Regional)</option>
                 <option value="Inspector">Inspector (Phytosanitary Certification)</option>
                 <option value="Extension Officer">Extension Officer (Zonal Support)</option>
-                <option value="Nursery Operator">Nursery Operator / Farmer</option>
+                <option value="Nursery Operator">Seed Garden Operator / Farmer</option>
               </select>
             </Field>
             <Field label="State / Scope">
@@ -217,9 +217,9 @@ export default function FormModal({ isOpen, onClose, pageKey, editRecord: editRe
           </>
         ) : pageKey === 'dist' ? (
           <>
-            <Field label="Source Nursery" error={errors.nur}>
+            <Field label="Source Seed Garden" error={errors.nur}>
               <select className={`${inputCls} app-select`} value={form.nur} onChange={e => set('nur', e.target.value)}>
-                <option value="">— Select Source Nursery —</option>
+                <option value="">— Select Source Seed Garden —</option>
                 {nurOptions.map(n => <option key={n} value={n}>{n}</option>)}
               </select>
             </Field>
@@ -252,7 +252,7 @@ export default function FormModal({ isOpen, onClose, pageKey, editRecord: editRe
             </Field>
             <Field label="Delivery Status">
               <select className={`${inputCls} app-select`} value={form.status} onChange={e => set('status', e.target.value)}>
-                <option value="In Transit">In Transit (Dispatched from nursery)</option>
+                <option value="In Transit">In Transit (Dispatched from seed garden)</option>
                 <option value="Received">Received (Handed over to farmers)</option>
                 <option value="Recorded">Recorded (Pending dispatch)</option>
               </select>
@@ -260,9 +260,9 @@ export default function FormModal({ isOpen, onClose, pageKey, editRecord: editRe
           </>
         ) : (
           <>
-            <Field label="Nursery" error={errors.nur}>
+            <Field label="Seed Garden" error={errors.nur}>
               <select className={`${inputCls} app-select`} value={form.nur} onChange={e => set('nur', e.target.value)}>
-                <option value="">— Select Nursery —</option>
+                <option value="">— Select Seed Garden —</option>
                 {nurOptions.map(n => <option key={n} value={n}>{n}</option>)}
               </select>
             </Field>

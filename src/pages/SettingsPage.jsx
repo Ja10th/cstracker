@@ -23,8 +23,8 @@ export default function SettingsPage() {
       <h2 className="section-heading mb-3">About this prototype</h2>
         <div className="space-y-2 text-sm text-gray-600">
           <p>
-            <strong className="text-gray-800">IITA Cacao Seed Tracker</strong> is a prototype system for tracking certified
-            cacao planting materials from nursery registration through production, inspection, and distribution.
+            <strong className="text-gray-800">IITA Cocoa Seed Tracker</strong> is a prototype system for tracking certified
+            Cocoa planting materials from nursery registration through production, inspection, and distribution.
           </p>
           <p>
             This demo runs entirely in the browser. Data is persisted to localStorage. No network requests

@@ -1,7 +1,7 @@
 {
-  "name": "IITA Cacao Seed Tracker",
-  "short_name": "Cacao Tracker",
-  "description": "Offline-ready nursery, production, inspection, and distribution tracking for cacao operations.",
+  "name": "IITA Cocoa Seed Tracker",
+  "short_name": "Cocoa Tracker",
+  "description": "Offline-ready nursery, production, inspection, and distribution tracking for Cocoa operations.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

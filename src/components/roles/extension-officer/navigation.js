@@ -2,7 +2,7 @@ import { navItem } from '../shared';
 
 export const extensionOfficerNavigation = [
   navItem('home', 'Dashboard', 'home'),
-  navItem('nur', 'Managed Nurseries', 'leaf', 'nur'),
+  navItem('nur', 'Managed Seed Gardens', 'leaf', 'nur'),
   navItem('prod', 'Production Records', 'box', 'prod'),
   navItem('notifications', 'Notifications', 'bell'),
 ];

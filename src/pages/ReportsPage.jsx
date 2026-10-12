@@ -16,7 +16,7 @@ function PreviewTable({ rows }) {
         <table className="data-table w-full text-[14px]">
           <thead className="bg-[#FAF8F1] border-b border-gray-200">
             <tr>
-              {['Production ID', 'Nursery', 'State', 'Variety', 'Quantity', 'Date recorded', 'Recorded by', 'Status'].map((heading) => (
+              {['Production ID', 'Seed Garden', 'State', 'Variety', 'Quantity', 'Date recorded', 'Recorded by', 'Status'].map((heading) => (
                 <th key={heading} className="text-left px-4 py-3 text-xs uppercase tracking-wide font-semibold text-[#8B8576]">{heading}</th>
               ))}
             </tr>
@@ -76,7 +76,7 @@ export default function ReportsPage() {
     ].filter(Boolean);
 
     return {
-      title: 'IITA Cacao Seed Tracker - Detailed Production & Verification Report',
+      title: 'IITA Cocoa Seed Tracker - Detailed Production & Verification Report',
       filterLabel: filterParts.length ? filterParts.join(' | ') : 'All Batches (Unfiltered)',
       summary: {
         'Seedlings Logged': totalSeedlings,
@@ -152,7 +152,7 @@ export default function ReportsPage() {
             </select>
           </label>
           <label className="space-y-2">
-            <span className="block text-xs uppercase tracking-wide font-semibold text-[#8B8576]">Nursery location</span>
+            <span className="block text-xs uppercase tracking-wide font-semibold text-[#8B8576]">Seed garden location</span>
             <select
               value={fState}
               onChange={(e) => setReportFilter('state', e.target.value)}
@@ -163,7 +163,7 @@ export default function ReportsPage() {
             </select>
           </label>
           <label className="space-y-2">
-            <span className="block text-xs uppercase tracking-wide font-semibold text-[#8B8576]">Cacao variety</span>
+            <span className="block text-xs uppercase tracking-wide font-semibold text-[#8B8576]">Cocoa variety</span>
             <select
               value={fVariety}
               onChange={(e) => setReportFilter('variety', e.target.value)}

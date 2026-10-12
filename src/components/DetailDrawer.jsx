@@ -38,7 +38,7 @@ export default function DetailDrawer({ isOpen, onClose, record, pageKey, onDecid
         return (
           <dl>
             <KV label="ID" value={record.id} />
-            {record.image && <div className="py-3 border-b border-gray-100"><dt className="text-xs text-gray-500 uppercase tracking-wide mb-2">Variety image</dt><dd><img src={record.image} alt={`${record.name} cacao variety`} className="w-24 h-20 object-cover border border-gray-200" /></dd></div>}
+            {record.image && <div className="py-3 border-b border-gray-100"><dt className="text-xs text-gray-500 uppercase tracking-wide mb-2">Variety image</dt><dd><img src={record.image} alt={`${record.name} Cocoa variety`} className="w-24 h-20 object-cover border border-gray-200" /></dd></div>}
             <KV label="Name" value={record.name} />
             <KV label="Operator" value={record.op} />
             <KV label="State" value={record.state} />
@@ -51,7 +51,7 @@ export default function DetailDrawer({ isOpen, onClose, record, pageKey, onDecid
         return (
           <dl>
             <KV label="ID" value={record.id} />
-            <KV label="Nursery" value={record.nur} />
+            <KV label="Seed Garden" value={record.nur} />
             <KV label="Variety" value={record.variety} />
             <KV label="Quantity" value={parseInt(record.qty, 10).toLocaleString()} />
             <KV label="Date Recorded" value={record.date} />
@@ -74,7 +74,7 @@ export default function DetailDrawer({ isOpen, onClose, record, pageKey, onDecid
           <>
             <dl>
               <KV label="ID" value={record.id} />
-              <KV label="Nursery" value={record.nur} />
+              <KV label="Seed Garden" value={record.nur} />
               <KV label="Production Record" value={record.prod} />
               <KV label="Inspector" value={record.by} />
               <KV label="Date" value={record.date} />
@@ -103,7 +103,7 @@ export default function DetailDrawer({ isOpen, onClose, record, pageKey, onDecid
         return (
           <dl>
             <KV label="ID" value={record.id} />
-            <KV label="Nursery" value={record.nur} />
+            <KV label="Seed Garden" value={record.nur} />
             <KV label="Production Record" value={record.prod} />
             <KV label="Variety" value={record.variety} />
             <KV label="Quantity" value={parseInt(record.qty, 10).toLocaleString()} />

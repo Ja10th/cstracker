@@ -9,7 +9,7 @@ import Modal from '../components/Modal';
 
 const PAGE_SIZE = 8;
 const TABLE_HEADINGS = {
-  nur: 'Nursery registry',
+  nur: 'Seed garden registry',
   prod: 'Production activity',
   vars: 'Available planting materials',
   insp: 'Inspection records',
@@ -75,12 +75,6 @@ export default function ListPage({ pageKey }) {
 
   function openWorkflow(row) {
     if (pageKey === 'users' || pageKey === 'vars') return;
-    if (pageKey === 'prod') {
-      if (row.planId) {
-        navigate('workflow', { workflowPageKey: 'plan', workflowRecordId: row.planId });
-        return;
-      }
-    }
     navigate('workflow', { workflowPageKey: pageKey, workflowRecordId: row.id });
   }
 
@@ -88,18 +82,43 @@ export default function ListPage({ pageKey }) {
     <div className="p-3 sm:p-6">
       {/* Table */}
       <div className="bg-white border border-gray-200">
-        <div className="px-5 py-4 border-b border-gray-200 flex flex-wrap items-center justify-between gap-3">
+        <div className="px-4 sm:px-5 py-4 border-b border-gray-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div className="section-heading">{TABLE_HEADINGS[pageKey] || 'Records'}</div>
-          <div className="flex flex-wrap items-center justify-end gap-2 w-full lg:w-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 w-full md:w-auto flex-wrap">
             <div className="relative w-full sm:w-52">
               <Icon name="search" className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              <input type="search" value={f.search || ''} onChange={e => setFilter(pageKey, 'search', e.target.value)} placeholder={`Search ${cfg.title.toLowerCase()}…`} className="app-input w-full" />
+              <input type="search" value={f.search || ''} onChange={e => setFilter(pageKey, 'search', e.target.value)} placeholder={`Search ${cfg.title.toLowerCase()}…`} className="app-input w-full text-gray-900 font-medium" />
             </div>
-            {cfg.filterFields.map(ff => <select key={ff.key} value={f[ff.key] || ''} onChange={e => setFilter(pageKey, ff.key, e.target.value)} className="app-select"><option value="">{ff.label}</option>{getSelectOptions(ff).map(o => <option key={o} value={o}>{o}</option>)}</select>)}
-            {cfg.hasDateRange && <input type="date" value={f.dateFrom || ''} onChange={e => setFilter(pageKey, 'dateFrom', e.target.value)} className="border border-gray-200 px-2 py-1.5 text-xs bg-white focus:outline-none focus:border-[#176B3A]" title="Filter by date" />}
-            {filtered.length !== allRows.length && <button onClick={() => { cfg.filterFields.forEach(ff => setFilter(pageKey, ff.key, '')); setFilter(pageKey, 'search', ''); if (cfg.hasDateRange) { setFilter(pageKey, 'dateFrom', ''); setFilter(pageKey, 'dateTo', ''); } }} className="text-xs text-red-600 hover:underline">Clear filters</button>}
+            {cfg.filterFields.map(ff => (
+              <select key={ff.key} value={f[ff.key] || ''} onChange={e => setFilter(pageKey, ff.key, e.target.value)} className="app-select w-full sm:w-auto text-gray-900 font-medium">
+                <option value="">{ff.label}</option>
+                {getSelectOptions(ff).map(o => <option key={o} value={o}>{o}</option>)}
+              </select>
+            ))}
+            {cfg.hasDateRange && (
+              <input
+                type="date"
+                value={f.dateFrom || ''}
+                onChange={e => setFilter(pageKey, 'dateFrom', e.target.value)}
+                className="app-date-input border border-gray-200 px-3 py-2 text-xs sm:text-sm bg-white text-gray-900 font-medium focus:outline-none focus:border-[#176B3A] min-h-[38px] w-full sm:w-auto"
+                title="Filter by date"
+              />
+            )}
+            {filtered.length !== allRows.length && (
+              <button
+                type="button"
+                onClick={() => {
+                  cfg.filterFields.forEach(ff => setFilter(pageKey, ff.key, ''));
+                  setFilter(pageKey, 'search', '');
+                  if (cfg.hasDateRange) { setFilter(pageKey, 'dateFrom', ''); setFilter(pageKey, 'dateTo', ''); }
+                }}
+                className="text-xs text-red-600 hover:underline py-1 text-center"
+              >
+                Clear filters
+              </button>
+            )}
             {canAdd && ['nur', 'prod', 'dist', 'users'].includes(pageKey) && (
-              <button onClick={() => setShowAdd(true)} className="action-button compact-action flex items-center gap-1.5 transition-colors">
+              <button onClick={() => setShowAdd(true)} className="action-button compact-action flex items-center justify-center gap-1.5 transition-colors w-full sm:w-auto">
                 <Icon name="plus" className="w-3.5 h-3.5" />
                 {cfg.addLabel}
               </button>
@@ -135,7 +154,7 @@ export default function ListPage({ pageKey }) {
                 {cfg.fields.map(field => (
                   <td key={field} className="px-4 py-3 whitespace-nowrap">
                     {field === 'image' ? (
-                      <img src={row[field]} alt={`${row.name} cacao variety`} className="w-10 h-10 object-cover border border-gray-200" />
+                      <img src={row[field]} alt={`${row.name} Cocoa variety`} className="w-10 h-10 object-cover border border-gray-200" />
                     ) : field === 'status' ? (
                       <Badge status={row[field]} />
                     ) : field === 'id' ? (
@@ -374,7 +393,7 @@ export default function ListPage({ pageKey }) {
               )}
               {selectedUser.nursery && selectedUser.nursery !== '—' && (
                 <div>
-                  <span className="text-xs font-semibold uppercase text-[#8B8576] block">Associated Nursery Facility</span>
+                  <span className="text-xs font-semibold uppercase text-[#8B8576] block">Associated Seed Garden Facility</span>
                   <span className="text-gray-800 font-semibold text-[#176B3A]">{selectedUser.nursery}</span>
                 </div>
               )}

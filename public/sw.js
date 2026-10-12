@@ -1,4 +1,4 @@
-const CACHE_NAME = 'iita-cacao-tracker-v1';
+const CACHE_NAME = 'iita-Cocoa-tracker-v1';
 const APP_SHELL = ['/', '/index.html', '/manifest.webmanifest', '/favicon.svg'];
 
 self.addEventListener('install', (event) => {

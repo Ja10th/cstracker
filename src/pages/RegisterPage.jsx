@@ -3,13 +3,13 @@ import { useApp } from '../context/AppContext';
 import logo from '../assets/IITA-Logo-finalll.png';
 
 const roles = [
-  { value: 'Nursery Operator', label: 'Farmer / Nursery operator' },
+  { value: 'Nursery Operator', label: 'Farmer / Seed garden operator' },
   { value: 'Extension Officer', label: 'Extension officer' },
   { value: 'Inspector', label: 'Inspector' },
   { value: 'Project Manager', label: 'Project manager' },
 ];
 
-const userTypeOptions = ['Farmer', 'Cacao seed producer', 'Extension officer', 'Inspector', 'Researcher', 'Nursery operator', 'Trader', 'Regulator', 'Other'];
+const userTypeOptions = ['Farmer', 'Cocoa seed producer', 'Extension officer', 'Inspector', 'Researcher', 'Seed garden operator', 'Trader', 'Regulator', 'Other'];
 const professionOptions = ['Farming', 'Agronomy', 'Research', 'Seed certification', 'Seed business', 'Extension services', 'Administration', 'Other'];
 const organizationTypes = ['Government', 'NGO', 'University', 'Research center', 'Private sector', 'Community organization', 'Other'];
 const affiliations = ['IITA', 'Cocoa Research Institute', 'FMARD', 'HarvestPlus', 'IFAD', 'Other', 'Not applicable'];
@@ -112,7 +112,7 @@ export default function RegisterPage({ onBack }) {
           <div className="flex items-start justify-between gap-4 mb-6">
             <div>
               <h1 className="text-2xl font-semibold text-gray-900">Create an account</h1>
-              <p className="text-sm text-gray-500 mt-1">Register to work with the Cacao Seed Tracker.</p>
+              <p className="text-sm text-gray-500 mt-1">Register to work with the Cocoa Seed Tracker.</p>
             </div>
             <button type="button" onClick={onBack} className="text-sm text-[#176B3A] hover:text-[#D45417] hover:underline">Sign in</button>
           </div>
@@ -141,7 +141,7 @@ export default function RegisterPage({ onBack }) {
                 <label className="text-sm text-gray-700">Profession<select required value={form.profession} onChange={update('profession')} className="app-select w-full mt-1"><option value="">Select profession</option>{professionOptions.map((profession) => <option key={profession}>{profession}</option>)}</select></label>
                 <label className="text-sm text-gray-700">Organization type<select required value={form.organizationType} onChange={update('organizationType')} className="app-select w-full mt-1"><option value="">Select organization type</option>{organizationTypes.map((type) => <option key={type}>{type}</option>)}</select></label>
               </div>
-              <label className="block text-sm text-gray-700 mt-4">Briefly describe what you do <span className="text-gray-400">(500 characters max)</span><textarea required maxLength={500} value={form.description} onChange={update('description')} className="w-full mt-1 border border-[#E1E5DF] p-3 text-sm min-h-24 focus:outline-none focus:border-[#176B3A]" placeholder="Describe your work with cacao or seed systems" /></label>
+              <label className="block text-sm text-gray-700 mt-4">Briefly describe what you do <span className="text-gray-400">(500 characters max)</span><textarea required maxLength={500} value={form.description} onChange={update('description')} className="w-full mt-1 border border-[#E1E5DF] p-3 text-sm min-h-24 focus:outline-none focus:border-[#176B3A]" placeholder="Describe your work with Cocoa or seed systems" /></label>
             </section>
             </>}
 
@@ -168,16 +168,16 @@ export default function RegisterPage({ onBack }) {
 
             {(form.role === 'Nursery Operator') && (
               <section className="py-1">
-                <h2 className="text-base font-semibold text-gray-900 mb-1">Nursery connection</h2>
-                <p className="text-sm text-gray-500 mb-4">Tell us whether you already operate a nursery. Activation and location verification happen after registration.</p>
-                <label className="text-sm text-gray-700">What best describes you?<select required value={form.nurserySituation} onChange={update('nurserySituation')} className="app-select w-full mt-1"><option value="none">I do not have a nursery yet</option><option value="existing">I already work with a registered nursery</option><option value="new">I want to register a new nursery</option></select></label>
+                <h2 className="text-base font-semibold text-gray-900 mb-1">Seed garden connection</h2>
+                <p className="text-sm text-gray-500 mb-4">Tell us whether you already operate a seed garden. Activation and location verification happen after registration.</p>
+                <label className="text-sm text-gray-700">What best describes you?<select required value={form.nurserySituation} onChange={update('nurserySituation')} className="app-select w-full mt-1"><option value="none">I do not have a seed garden yet</option><option value="existing">I already work with a registered seed garden</option><option value="new">I want to register a new seed garden</option></select></label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {form.nurserySituation === 'existing' && <label className="text-sm text-gray-700">Registered nursery<select required value={form.existingNurseryId} onChange={(event) => { const nursery = data.nur.find((item) => item.id === event.target.value); setForm((current) => ({ ...current, existingNurseryId: event.target.value, nurseryName: nursery?.name || '' })); }} className="app-select w-full mt-1"><option value="">Select nursery</option>{(data.nur || []).map((nursery) => <option key={nursery.id} value={nursery.id}>{nursery.id} · {nursery.name}</option>)}</select></label>}
-                  {form.nurserySituation === 'new' && <label className="text-sm text-gray-700">Proposed nursery name<input required value={form.nurseryName} onChange={update('nurseryName')} className="app-input w-full mt-1 pl-3" placeholder="Enter nursery name" /></label>}
-                  <label className="text-sm text-gray-700">Farm or nursery size <span className="text-gray-400">(optional)</span><input value={form.farmSize} onChange={update('farmSize')} className="app-input w-full mt-1 pl-3" placeholder="e.g. 2 hectares" /></label>
+                  {form.nurserySituation === 'existing' && <label className="text-sm text-gray-700">Registered seed garden<select required value={form.existingNurseryId} onChange={(event) => { const nursery = data.nur.find((item) => item.id === event.target.value); setForm((current) => ({ ...current, existingNurseryId: event.target.value, nurseryName: nursery?.name || '' })); }} className="app-select w-full mt-1"><option value="">Select seed garden</option>{(data.nur || []).map((nursery) => <option key={nursery.id} value={nursery.id}>{nursery.id} · {nursery.name}</option>)}</select></label>}
+                  {form.nurserySituation === 'new' && <label className="text-sm text-gray-700">Proposed seed garden name<input required value={form.nurseryName} onChange={update('nurseryName')} className="app-input w-full mt-1 pl-3" placeholder="Enter seed garden name" /></label>}
+                  <label className="text-sm text-gray-700">Farm or seed garden size <span className="text-gray-400">(optional)</span><input value={form.farmSize} onChange={update('farmSize')} className="app-input w-full mt-1 pl-3" placeholder="e.g. 2 hectares" /></label>
                 </div>
                 <label className="block text-sm text-gray-700 mt-4">Do you have production ready to register now?<select value={form.productionReady} onChange={update('productionReady')} className="app-select w-full mt-1"><option value="yes">Yes — I will record it after approval</option><option value="no">No — I am preparing for future production</option></select></label>
-                <p className="text-xs text-gray-500 mt-2">Production details, quantities, photos, and evidence are captured in My Production after your nursery connection is reviewed.</p>
+                <p className="text-xs text-gray-500 mt-2">Production details, quantities, photos, and evidence are captured in My Production after your seed garden connection is reviewed.</p>
               </section>
             )}
             </>}
@@ -198,7 +198,7 @@ export default function RegisterPage({ onBack }) {
 
             <section className="py-1">
               <h2 className="text-base font-semibold text-gray-900 mb-4">User agreement</h2>
-              <div className="space-y-2 text-sm text-gray-600"><label className="flex items-start gap-3"><input type="checkbox" checked={form.displayPhone} onChange={(event) => setForm((current) => ({ ...current, displayPhone: event.target.checked }))} className="mt-1 accent-[#176B3A]" />Allow registered project users to view my phone number.</label><label className="flex items-start gap-3"><input type="checkbox" checked={form.displayEmail} onChange={(event) => setForm((current) => ({ ...current, displayEmail: event.target.checked }))} className="mt-1 accent-[#176B3A]" />Allow registered project users to view my email address.</label><label className="flex items-start gap-3"><input required type="checkbox" checked={form.terms} onChange={(event) => setForm((current) => ({ ...current, terms: event.target.checked }))} className="mt-1 accent-[#176B3A]" />I agree to the Cacao Seed Tracker terms and confirm that these details are accurate.</label></div>
+              <div className="space-y-2 text-sm text-gray-600"><label className="flex items-start gap-3"><input type="checkbox" checked={form.displayPhone} onChange={(event) => setForm((current) => ({ ...current, displayPhone: event.target.checked }))} className="mt-1 accent-[#176B3A]" />Allow registered project users to view my phone number.</label><label className="flex items-start gap-3"><input type="checkbox" checked={form.displayEmail} onChange={(event) => setForm((current) => ({ ...current, displayEmail: event.target.checked }))} className="mt-1 accent-[#176B3A]" />Allow registered project users to view my email address.</label><label className="flex items-start gap-3"><input required type="checkbox" checked={form.terms} onChange={(event) => setForm((current) => ({ ...current, terms: event.target.checked }))} className="mt-1 accent-[#176B3A]" />I agree to the Cocoa Seed Tracker terms and confirm that these details are accurate.</label></div>
             </section>
             </>}
             {error && <p className="text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2">{error}</p>}

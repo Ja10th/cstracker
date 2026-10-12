@@ -37,9 +37,9 @@ export default function NurseryOperatorDashboard() {
       />
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <KpiCard
-          label="Assigned nursery"
+          label="Assigned seed garden"
           value={nursery.length}
-          sublabel={nursery[0]?.status || "Assigned nursery"}
+          sublabel={nursery[0]?.status || "Assigned seed garden"}
           onClick={() => navigate("nur")}
         />
         <KpiCard
@@ -68,13 +68,13 @@ export default function NurseryOperatorDashboard() {
           title="Recent production activity"
           records={[...production].sort((a, b) => b.date.localeCompare(a.date))}
           empty="No production records yet."
-          onRecordClick={(record) => navigate("workflow", { workflowPageKey: record.planId ? 'plan' : 'prod', workflowRecordId: record.planId || record.id })}
+          onRecordClick={(record) => navigate("workflow", { workflowPageKey: 'prod', workflowRecordId: record.id })}
           columns={["status", "date", "by"]}
         />
         <RecordsTable
-          title="Assigned nursery details"
+          title="Assigned seed garden details"
           records={nursery}
-          empty="No nursery assigned."
+          empty="No seed garden assigned."
           onRecordClick={(record) => navigate("workflow", { workflowPageKey: 'nur', workflowRecordId: record.id })}
           columns={["status", "date"]}
         />

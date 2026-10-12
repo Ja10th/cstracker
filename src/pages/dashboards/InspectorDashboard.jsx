@@ -17,7 +17,7 @@ function ReviewQueueTable({ records, onOpen, onRecordClick }) {
         <table className="data-table w-full min-w-[480px] text-[14px]">
           <thead className="bg-[#FAF8F1] border-b border-gray-200">
             <tr>
-              {['Reference', 'Nursery', 'Date', 'Status'].map((h) => (
+              {['Reference', 'Seed Garden', 'Date', 'Status'].map((h) => (
                 <th key={h} className="text-left px-4 py-3 text-xs uppercase font-semibold text-[#8B8576]">{h}</th>
               ))}
             </tr>
@@ -50,7 +50,7 @@ function InspectionActivityTable({ records, onOpen }) {
         <button onClick={() => onOpen()} className="text-xs text-[#176B3A] hover:underline">Open list</button>
       </div>
       <table className="data-table w-full min-w-[560px] text-[14px]">
-        <thead className="bg-gray-50 border-b border-gray-100"><tr>{['Reference', 'Nursery', 'Date', 'Status'].map((heading) => <th key={heading} className="text-left px-4 py-3 font-medium text-gray-600">{heading}</th>)}</tr></thead>
+        <thead className="bg-gray-50 border-b border-gray-100"><tr>{['Reference', 'Seed Garden', 'Date', 'Status'].map((heading) => <th key={heading} className="text-left px-4 py-3 font-medium text-gray-600">{heading}</th>)}</tr></thead>
         <tbody>{records.slice(0, 5).map((record, index) => <tr key={record.id} onClick={() => onOpen(record)} className={`cursor-pointer border-b border-gray-100 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-[#F7F3E9]`}><td className="px-4 py-3 font-mono text-gray-600">{record.id}</td><td className="px-4 py-3 text-gray-800">{record.nur}</td><td className="px-4 py-3 text-gray-500">{record.date}</td><td className="px-4 py-3"><Badge status={record.status} /></td></tr>)}</tbody>
       </table>
     </div>

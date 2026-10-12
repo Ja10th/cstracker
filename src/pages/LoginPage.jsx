@@ -14,7 +14,7 @@ export default function LoginPage() {
   const person = PEOPLE[selected];
   const roleName =
     person.role === "Nursery Operator"
-      ? "Nursery Operator / Farmer"
+      ? "Seed Garden Operator / Farmer"
       : person.role;
 
   return (
@@ -29,7 +29,7 @@ export default function LoginPage() {
           />
         </div>
         <div>
-          <h2 className="text-center pb-4 text-xl md:text-4xl font-bold">Cacao Seed Tracker</h2>
+          <h2 className="text-center pb-4 text-xl md:text-4xl font-bold">Cocoa Seed Tracker</h2>
         </div>
 
         {/* Card */}
@@ -54,7 +54,7 @@ export default function LoginPage() {
                   <option key={i} value={i}>
                     {p.name} —{" "}
                     {p.role === "Nursery Operator"
-                      ? "Nursery Operator / Farmer"
+                      ? "Seed Garden Operator / Farmer"
                       : p.role}
                   </option>
                 ))}
